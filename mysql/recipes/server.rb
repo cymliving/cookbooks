@@ -76,7 +76,19 @@ rescue
 end
 
 execute "mysql-install-privileges" do
-  command "/usr/bin/mysql -u root -p#{node[:mysql][:server_root_password]} < /etc/mysql/grants.sql"
+  command "/usr/bin/mysql --defaults-file=/etc/msql/debian.cnf < /etc/mysql/grants.sql"
   action :nothing
   subscribes :run, resources(:template => "/etc/mysql/grants.sql")
+end
+
+case node[:platform]
+when "debian", "ubuntu"
+  template "/etc/mysql/debian.cnf" do
+    source "debian.cnf.erb"
+    owner "root"
+    group "root"
+    mode "0644"
+    action :nothing
+    subscribes :create, resources(:execute => "mysql-install-privileges")
+  end
 end
