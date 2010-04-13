@@ -1,0 +1,12 @@
+= DESCRIPTION:
+
+Installs and configures zoneminder
+
+= REQUIREMENTS:
+
+Only tested on Ubuntu 9.10.  
+
+= ATTRIBUTES: 
+
+= USAGE:
+
