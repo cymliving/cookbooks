@@ -79,6 +79,7 @@ execute "mysql-install-privileges" do
   command "/usr/bin/mysql --defaults-file=/etc/msql/debian.cnf < /etc/mysql/grants.sql"
   action :nothing
   subscribes :run, resources(:template => "/etc/mysql/grants.sql")
+#  not_if "mysql -uroot -p#{node[:mysql][:server_root_password]} 'select 1'"
 end
 
 case node[:platform]
@@ -88,7 +89,7 @@ when "debian", "ubuntu"
     owner "root"
     group "root"
     mode "0644"
-    action :nothing
+    action :create
     subscribes :create, resources(:execute => "mysql-install-privileges")
   end
 end
