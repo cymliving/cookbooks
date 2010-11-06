@@ -191,19 +191,32 @@
       "debian": [
 
       ],
+      "fedora": [
+
+      ],
+      "centos": [
+
+      ],
+      "suse": [
+
+      ],
       "ubuntu": [
+
+      ],
+      "redhat": [
 
       ]
     },
     "license": "Apache 2.0",
-    "version": "0.21.3",
+    "version": "0.23.1",
+    "maintainer": "Opscode, Inc.",
+    "suggestions": {
+    },
     "recipes": {
+      "mysql": "Includes the client recipe to configure a client",
       "mysql::client": "Installs packages required for mysql clients using run_action magic",
       "mysql::server_ec2": "Performs EC2-specific mountpoint manipulation",
       "mysql::server": "Installs packages required for mysql servers w/o manual intervention"
-    },
-    "maintainer": "Opscode, Inc.",
-    "suggestions": {
     },
     "maintainer_email": "cookbooks@opscode.com",
     "name": "mysql",
