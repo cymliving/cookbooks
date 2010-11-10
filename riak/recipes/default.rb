@@ -22,6 +22,17 @@ class Chef::Resource::Template
   include RiakTemplateHelper
 end
 
+# Workaround hack for ticket CHEF-1286.
+# This can be removed when CHEF-1286 is reverted in a future release.
+version_parts = node[:chef_packages][:chef][:version].split(".")
+if version_parts[0].eql?("0") && version_parts[1].eql?("9")
+  if (node[:riak][:package][:type]).eql?("source")
+    node.default[:riak][:package][:prefix] = "/usr/local"
+    node.default[:riak][:package][:config_dir] = node.riak.package.prefix + "/riak/etc"
+  end
+end
+# end workaround
+
 version_str = "#{node[:riak][:package][:version][:major]}.#{node[:riak][:package][:version][:minor]}"
 base_uri = "http://downloads.basho.com/riak/riak-#{version_str}/"
 base_filename = "riak-#{version_str}.#{node[:riak][:package][:version][:incremental]}"
@@ -136,7 +147,7 @@ if node[:riak][:package][:type].eql?("binary")
   service "riak" do
     supports :start => true, :stop => true, :status => true, :restart => true
     action [ :enable ]
-    subscribes :restart, resources(:template => "#{node[:riak][:package][:config_dir]}/app.config",
-                                   :template => "#{node[:riak][:package][:config_dir]}/vm.args")
+    subscribes :restart, resources(:template => [ "#{node[:riak][:package][:config_dir]}/app.config",
+                                                  "#{node[:riak][:package][:config_dir]}/vm.args" ])
   end
 end

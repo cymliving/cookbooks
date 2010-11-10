@@ -2,7 +2,7 @@ maintainer        "Opscode, Inc."
 maintainer_email  "cookbooks@opscode.com"
 license           "Apache 2.0"
 description       "Installs and maintains php and php modules"
-version           "0.9.1"
+version           "0.9.2"
 depends           "apache2"
 recipe            "php", "Empty, use one of the other recipes"
 recipe            "php::module_apc", "Install the php5-apc package"
@@ -21,5 +21,9 @@ recipe            "php::php5-cgi", "Install the php5-cgi package"
 recipe            "php::php5", "Install php5 packages and php.ini config file"
 
 %w{ubuntu debian}.each do |os|
+  supports os
+end
+
+%w{centos redhat fedora suse}.each do |os|
   supports os
 end

@@ -25,3 +25,10 @@ default[:radiant][:environment]     = "production"
 default[:radiant][:revision]        = "HEAD"
 default[:radiant][:action]          = "nothing"
 default[:radiant][:edge]            = false
+default[:radiant][:db_bootstrap]    = <<EOS
+yes | rake #{radiant[:environment]} db:bootstrap \
+ADMIN_NAME=Administrator \
+ADMIN_USERNAME=admin \
+ADMIN_PASSWORD=radiant \
+DATABASE_TEMPLATE=empty.yml
+EOS
