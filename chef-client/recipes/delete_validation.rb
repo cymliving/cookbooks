@@ -1,8 +1,9 @@
 #
-# Cookbook Name:: bluepill
-# Recipe:: default
+# Author:: Joshua Timberman <joshua@opscode.com>
+# Cookbook Name:: chef
+# Recipe:: delete_validation
 #
-# Copyright 2010, Opscode, Inc.
+# Copyright 2010, Opscode, Inc
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,18 +16,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
 
-gem_package "i18n"
-gem_package "bluepill"
-
-[
-  node["bluepill"]["conf_dir"],
-  node["bluepill"]["pid_dir"],
-  node["bluepill"]["state_dir"]
-].each do |dir|
-  directory dir do
-    owner "root"
-    group "root"
-  end
+file Chef::Config[:validation_key] do
+  action :delete
+  backup false
+  only_if { ::File.exists?(Chef::Config[:client_key]) }
 end

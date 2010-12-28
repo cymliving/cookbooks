@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: bluepill
+# Cookbook Name:: chef-client
 # Recipe:: default
 #
 # Copyright 2010, Opscode, Inc.
@@ -17,16 +17,4 @@
 # limitations under the License.
 #
 
-gem_package "i18n"
-gem_package "bluepill"
-
-[
-  node["bluepill"]["conf_dir"],
-  node["bluepill"]["pid_dir"],
-  node["bluepill"]["state_dir"]
-].each do |dir|
-  directory dir do
-    owner "root"
-    group "root"
-  end
-end
+include_recipe "chef-client::service"
