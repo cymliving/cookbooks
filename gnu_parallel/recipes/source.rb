@@ -23,6 +23,7 @@ version = node['gnu_parallel']['version']
 
 remote_file "#{Chef::Config[:file_cache_path]}/parallel-#{version}.tar.bz2" do
   source "#{node['gnu_parallel']['url']}/parallel-#{version}.tar.bz2"
+  checksum node['gnu_parallel']['checksum']
   mode 0644
 end
 
@@ -33,4 +34,5 @@ bash "build gnu parallel" do
   (cd parallel-#{version} && ./configure #{node['gnu_parallel']['configure_options'].join(" ")})
   (cd parallel-#{version} && make && make install)
   EOF
+  not_if "parallel --version | grep -x 'GNU parallel #{version}'"
 end

@@ -18,36 +18,6 @@
 # limitations under the License.
 #
 
-python_pkgs = value_for_platform(
-  ["debian","ubuntu"] => {
-    "default" => ["python","python-dev"]
-  },
-  ["centos","redhat","fedora"] => {
-    "default" => ["python26","python26-devel"]
-  },
-  "default" => ["python","python-dev"]
-)
-
-python_pkgs.each do |pkg|
-  package pkg do
-    action :install
-  end
-end
-
-# Ubuntu's python-setuptools, python-pip and python-virtualenv packages 
-# are broken...this feels like Rubygems!
-# http://stackoverflow.com/questions/4324558/whats-the-proper-way-to-install-pip-virtualenv-and-distribute-for-python
-# https://bitbucket.org/ianb/pip/issue/104/pip-uninstall-on-ubuntu-linux
-bash "install-pip" do
-  cwd Chef::Config[:file_cache_path]
-  code <<-EOH
-  curl -O http://python-distribute.org/distribute_setup.py
-  python distribute_setup.py
-  easy_install pip
-  EOH
-  not_if "which pip"
-end
-
-python_pip "virtualenv" do
-  action :install
-end
+include_recipe "python::#{node['python']['install_method']}"
+include_recipe "python::pip"
+include_recipe "python::virtualenv"
